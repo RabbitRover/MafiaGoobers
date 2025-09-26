@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Minecraft Status</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .online { color: green; }
+    .offline { color: red; }
+  </style>
+</head>
+<body>
+  <h2>Minecraft Server Status</h2>
+  <div id="status">Checking...</div>
+  <div id="players"></div>
+
+  <script>
+    const server = "play.example.com"; // change this
+    fetch(`https://api.mcsrvstat.us/2/${server}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.online) {
+          document.getElementById("status").innerHTML = `✅ Online (${data.players.online}/${data.players.max})`;
+          if (data.players.list) {
+            document.getElementById("players").innerHTML = "Players: " + data.players.list.join(", ");
+          }
+        } else {
+          document.getElementById("status").innerHTML = "❌ Offline";
+        }
+      })
+      .catch(() => {
+        document.getElementById("status").innerHTML = "⚠️ Error checking status";
+      });
+  </script>
+</body>
+</html>
